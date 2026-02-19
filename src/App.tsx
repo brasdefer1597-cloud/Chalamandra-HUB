@@ -15,21 +15,21 @@ const projects = [
   },
   {
     title: "Memoria Delta",
-    desc: "Arquitectura de gestión de datos masivos. Optimización de miles de nodos mediante delegación de eventos.",
+    desc: "Gestión de estados complejos y persistencia de datos mediante estructuras Delta-Sync.",
     url: "#",
-    tag: "Performance"
+    tag: "Data Engineering"
   },
   {
     title: "Quantum Parser",
-    desc: "Analizador de flujos de datos en tiempo real con optimización de carga en GPU mediante IntersectionObserver.",
+    desc: "Algoritmos de análisis de flujo inspirados en computación cuántica para optimización de procesos.",
     url: "#",
-    tag: "Data Flow"
+    tag: "Quantum Logic"
   },
   {
     title: "Cipher Protocol",
-    desc: "Estructura de arquitectura limpia y seguridad de componentes. El estándar de oro de la Chalamandra.",
+    desc: "Capa de seguridad y estandarización de componentes para arquitecturas escalables.",
     url: "#",
-    tag: "Architecture"
+    tag: "Security & DevOp"
   },
   {
     title: "Oráculo Chalamandra",
