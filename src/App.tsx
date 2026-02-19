@@ -2,6 +2,12 @@ import React from 'react';
 
 const projects = [
   {
+    title: "Oráculo Chalamandra",
+    desc: "Interfaz de consulta místico-tecnológica. Procesamiento de lenguaje natural con estética de alta fidelidad.",
+    url: "https://brasdefer1597-cloud.github.io/Or-culo-Chalamandra-/",
+    tag: "Oracle AI"
+  },
+  {
     title: "Ajedrez Criminal",
     desc: "Motor de decisión estratégica potenciado por Gemini 1.5 Flash. Análisis de patrones y lógica de alto nivel.",
     url: "https://estrategia-maestra-ajedrez-criminal.vercel.app/",
@@ -14,28 +20,10 @@ const projects = [
     tag: "Semantic UI"
   },
   {
-    title: "Memoria Delta",
-    desc: "Gestión de estados complejos y persistencia de datos mediante estructuras Delta-Sync.",
-    url: "#",
-    tag: "Data Engineering"
-  },
-  {
-    title: "Quantum Parser",
-    desc: "Algoritmos de análisis de flujo inspirados en computación cuántica para optimización de procesos.",
-    url: "#",
-    tag: "Quantum Logic"
-  },
-  {
-    title: "Cipher Protocol",
-    desc: "Capa de seguridad y estandarización de componentes para arquitecturas escalables.",
-    url: "#",
-    tag: "Security & DevOp"
-  },
-  {
-    title: "Oráculo Chalamandra",
-    desc: "Interfaz de consulta místico-tecnológica. Procesamiento de lenguaje natural con estética de alta fidelidad.",
-    url: "https://brasdefer1597-cloud.github.io/Or-culo-Chalamandra-/",
-    tag: "Oracle AI"
+    title: "Chalamandra Magistral",
+    desc: "El núcleo del ecosistema. Historias, metodologías y decodificación de realidades.",
+    url: "https://chalamandra-magistral.vercel.app/",
+    tag: "Mastermind"
   }
 ];
 
@@ -54,7 +42,7 @@ function App() {
         <p className="text-blue-500 font-mono tracking-[0.3em] uppercase text-xs mt-2">Ecosistema de Ingeniería</p>
       </header>
 
-      <main className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+      <main className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         {projects.map((p, i) => (
           <div key={i} className="group relative border border-gray-900 p-8 hover:border-blue-600/50 transition-all duration-500 bg-gradient-to-br from-black to-gray-950">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
