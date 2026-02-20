@@ -11,6 +11,7 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
   variant = 'cta', 
   size = 'md' 
 }) => {
+  const kofiUrl = 'https://ko-fi.com/chalamandramagistral';
   const [isFlashing, setIsFlashing] = useState(false);
   const { trackDecodification } = useStats();
 
@@ -22,8 +23,10 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
     // Tracking de decodificación
     trackDecodification();
 
-    // Abrir Ko-fi en nueva pestaña
-    window.open('#', '_blank', 'noopener,noreferrer');
+    // Redirigir a Ko-fi y permitir retorno con bandera en URL
+    const returnUrl = `${window.location.origin}${window.location.pathname}?kofi_return=1`;
+    const checkoutUrl = `${kofiUrl}?return_url=${encodeURIComponent(returnUrl)}`;
+    window.location.href = checkoutUrl;
   };
 
   const variants = {

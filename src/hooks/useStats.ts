@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { ChalamandraStats } from '../types';
 
 const STATS_STORAGE_KEY = 'chalamandra_stats';
