@@ -109,9 +109,9 @@ function App() {
 
       {/* Status Indicator */}
       <div className="max-w-5xl mx-auto flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2 px-3 py-1 border border-green-900 bg-green-950/20 rounded-full">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-[10px] font-mono text-green-500 uppercase tracking-widest">All Systems Operational</span>
+        <div className="flex items-center gap-2 px-3 py-1 border border-[var(--chala-verde)]/40 bg-[var(--chala-verde)]/10 rounded-full">
+          <div className="w-2 h-2 bg-[var(--chala-verde)] rounded-full animate-pulse"></div>
+          <span className="text-[10px] font-mono text-[var(--chala-verde)] uppercase tracking-widest">All Systems Operational</span>
         </div>
 
         <div className="flex items-center gap-4">
@@ -124,11 +124,11 @@ function App() {
       </div>
 
       {/* Header */}
-      <header className="max-w-5xl mx-auto mb-16 border-l-4 border-blue-600 pl-8 py-2 relative">
+      <header className="max-w-5xl mx-auto mb-16 border-l-4 border-[var(--chala-azul)] pl-8 py-2 relative">
         <h1 className="text-6xl font-black tracking-tighter text-white">CHALAMANDRA</h1>
         <div className="flex items-center justify-between mt-2">
-          <p className="text-blue-500 font-mono tracking-[0.3em] uppercase text-xs">Ecosistema de Ingeniería</p>
-          <div className="flex items-center gap-4 text-[10px] text-gray-600">
+          <p className="text-[var(--chala-mandala)] font-mono tracking-[0.3em] uppercase text-xs">Ecosistema de Ingeniería</p>
+          <div className="flex items-center gap-4 text-[10px] text-[var(--chala-gris)]/70">
             <div className="flex items-center gap-1">
               <Cpu className="w-3 h-3" />
               <span>CPU: 23%</span>
