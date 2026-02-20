@@ -29,13 +29,24 @@ export interface PudinState {
 }
 
 export interface ChalamandraStats {
+  escaneos: number;
+  nodosActivos: number;
   decodificaciones: number;
   lastDecodification: Date;
   totalRevenue: number;
+  clicksByNode: Record<string, number>;
+}
+
+export interface TrackEventPayload {
+  valor: string;
+  nodo: string;
 }
 
 declare global {
   interface Window {
-    trackDecoEvent: (event: string, data: { valor: string; nodo: string }) => void;
+    trackDecoEvent: (event: string, data: TrackEventPayload) => void;
+    chalamandra?: {
+      isPudinActive: () => boolean;
+    };
   }
 }

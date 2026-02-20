@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { PudinState } from '../types';
 
 const PUDIN_STORAGE_KEY = 'chalamandra_pudin_state';

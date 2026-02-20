@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/ajedrez",
+      "destination": "https://estrategia-maestra-ajedrez-criminal.vercel.app/"
+    },
+    {
+      "source": "/oraculo",
+      "destination": "https://brasdefer1597-cloud.github.io/Or-culo-Chalamandra-/"
+    },
+    {
+      "source": "/srap",
+      "destination": "/nodo-srap"
+    }
+  ]
+}
