@@ -22,6 +22,11 @@ function App() {
   const { pudinState } = usePudin();
   const { stats } = useStats();
 
+  const getKofiCheckoutUrl = () => {
+    const returnUrl = `${window.location.origin}${window.location.pathname}?kofi_return=1`;
+    return `${KOFI_URL}?return_url=${encodeURIComponent(returnUrl)}`;
+  };
+
   // Configurar tracking global
   React.useEffect(() => {
     window.trackDecoEvent = (event: string, data: { valor: string; nodo: string }) => {
@@ -117,7 +122,7 @@ function App() {
 
         <div className="mb-6 flex items-center justify-center gap-6 text-xs uppercase tracking-[0.2em]">
           <a
-            href={KOFI_URL}
+            href={getKofiCheckoutUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="text-purple-400 hover:text-purple-300 transition-colors"
@@ -125,7 +130,7 @@ function App() {
             Suscripción
           </a>
           <a
-            href={KOFI_URL}
+            href={getKofiCheckoutUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="text-purple-400 hover:text-purple-300 transition-colors"
