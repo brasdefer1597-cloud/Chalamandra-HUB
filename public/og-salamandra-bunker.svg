@@ -1,0 +1,13 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'>
+  <defs>
+    <linearGradient id='g' x1='0' x2='1'>
+      <stop offset='0' stop-color='#050505'/>
+      <stop offset='1' stop-color='#111827'/>
+    </linearGradient>
+  </defs>
+  <rect width='1200' height='630' fill='url(#g)'/>
+  <circle cx='220' cy='315' r='120' fill='#22c55e' opacity='.9'/>
+  <polygon points='220,210 250,260 305,270 265,310 272,365 220,340 168,365 175,310 135,270 190,260' fill='#7c3aed'/>
+  <text x='390' y='280' fill='#4ade80' font-family='Arial, sans-serif' font-size='58' font-weight='700'>Chalamandra Magistral</text>
+  <text x='390' y='350' fill='#e5e7eb' font-family='Arial, sans-serif' font-size='44'>Acceso al Búnker Autorizado</text>
+</svg>

@@ -1,46 +1,94 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { ChalamandraStats } from '../types';
 
 const STATS_STORAGE_KEY = 'chalamandra_stats';
 
-export const useStats = () => {
-  const [stats, setStats] = useState<ChalamandraStats>(() => {
-    const stored = localStorage.getItem(STATS_STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return {
-        ...parsed,
-        lastDecodification: new Date(parsed.lastDecodification)
-      };
-    }
+const getInitialStats = (): ChalamandraStats => {
+  const stored = localStorage.getItem(STATS_STORAGE_KEY);
+  if (stored) {
+    const parsed = JSON.parse(stored);
     return {
-      decodificaciones: 0,
-      lastDecodification: new Date(),
-      totalRevenue: 0
+      escaneos: parsed.escaneos ?? 0,
+      nodosActivos: parsed.nodosActivos ?? 128,
+      decodificaciones: parsed.decodificaciones ?? 0,
+      lastDecodification: parsed.lastDecodification ? new Date(parsed.lastDecodification) : new Date(),
+      totalRevenue: parsed.totalRevenue ?? 0,
+      clicksByNode: parsed.clicksByNode ?? {}
     };
-  });
+  }
+
+  return {
+    escaneos: 0,
+    nodosActivos: 128,
+    decodificaciones: 0,
+    lastDecodification: new Date(),
+    totalRevenue: 0,
+    clicksByNode: {}
+  };
+};
+
+export const useStats = () => {
+  const [stats, setStats] = useState<ChalamandraStats>(getInitialStats);
+
+  const persist = useCallback((updater: (prev: ChalamandraStats) => ChalamandraStats) => {
+    setStats((prev) => {
+      const next = updater(prev);
+      localStorage.setItem(STATS_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  const registerVisit = useCallback(() => {
+    persist((prev) => ({
+      ...prev,
+      escaneos: prev.escaneos + 1
+    }));
+  }, [persist]);
+
+  const updateNodosActivos = useCallback((value: number) => {
+    persist((prev) => ({
+      ...prev,
+      nodosActivos: value
+    }));
+  }, [persist]);
+
+  const trackNodeClick = useCallback((node: string) => {
+    persist((prev) => {
+      const current = prev.clicksByNode[node] ?? 0;
+      return {
+        ...prev,
+        clicksByNode: {
+          ...prev.clicksByNode,
+          [node]: current + 1
+        }
+      };
+    });
+  }, [persist]);
 
   const trackDecodification = useCallback(() => {
-    const newStats: ChalamandraStats = {
-      decodificaciones: stats.decodificaciones + 1,
+    persist((prev) => ({
+      ...prev,
+      decodificaciones: prev.decodificaciones + 1,
       lastDecodification: new Date(),
-      totalRevenue: stats.totalRevenue + 47 // Valor simbólico por decodificación
-    };
+      totalRevenue: prev.totalRevenue + 47
+    }));
 
-    setStats(newStats);
-    localStorage.setItem(STATS_STORAGE_KEY, JSON.stringify(newStats));
-
-    // Disparar evento global de tracking
     if (window.trackDecoEvent) {
-      window.trackDecoEvent('Decodificación_Exitosa', { 
-        valor: 'Suscripción_PRO', 
-        nodo: 'Refinería' 
+      window.trackDecoEvent('Decodificación_Exitosa', {
+        valor: 'Suscripción_PRO',
+        nodo: 'Refinería'
       });
     }
-  }, [stats]);
+  }, [persist]);
+
+  const topNode = Object.entries(stats.clicksByNode).sort((a, b) => b[1] - a[1])[0]?.[0] ?? 'Sin datos';
 
   return {
     stats,
+    topNode,
+    registerVisit,
+    updateNodosActivos,
+    trackNodeClick,
     trackDecodification
   };
 };
