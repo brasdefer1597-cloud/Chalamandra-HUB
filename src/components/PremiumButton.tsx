@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Crown, Sparkles, ExternalLink } from 'lucide-react';
 import { useStats } from '../hooks/useStats';
+import { trackKofiClick } from '../utils/platformState';
 
 interface PremiumButtonProps {
   variant?: 'default' | 'cta' | 'minimal';
@@ -22,6 +23,9 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
 
     // Tracking de decodificación
     trackDecodification();
+
+    // Registrar salto hacia Ko-fi
+    trackKofiClick();
 
     // Redirigir a Ko-fi y permitir retorno con bandera en URL
     const returnUrl = `${window.location.origin}${window.location.pathname}?kofi_return=1`;

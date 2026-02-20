@@ -6,8 +6,10 @@ import { AdminBanner } from './components/AdminBanner';
 import { PudinButton } from './components/PudinButton';
 import { ProBadge } from './components/ProBadge';
 import { PremiumButton } from './components/PremiumButton';
+import { AdminBunker } from './components/AdminBunker';
 import { usePudin } from './hooks/usePudin';
 import { useStats } from './hooks/useStats';
+import { trackKofiClick, isPanicModeEnabled } from './utils/platformState';
 import { Terminal, Cpu, Database } from 'lucide-react';
 
 const KOFI_URL = 'https://ko-fi.com/chalamandramagistral';
@@ -19,6 +21,7 @@ function App() {
   const [showBunkerCodeInput, setShowBunkerCodeInput] = useState(false);
   const [accessCode, setAccessCode] = useState('');
   const [accessMessage, setAccessMessage] = useState('');
+  const [panicMode, setPanicModeState] = useState(false);
   const { pudinState } = usePudin();
   const { stats } = useStats();
 
@@ -32,6 +35,22 @@ function App() {
     window.trackDecoEvent = (event: string, data: { valor: string; nodo: string }) => {
       console.log(`🔥 DECO EVENT: ${event}`, data);
       // Aquí se podría integrar con Google Analytics, Mixpanel, etc.
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setPanicModeState(isPanicModeEnabled());
+
+    const updatePanicMode = () => {
+      setPanicModeState(isPanicModeEnabled());
+    };
+
+    window.addEventListener('chalamandra:panic-mode-updated', updatePanicMode);
+    window.addEventListener('storage', updatePanicMode);
+
+    return () => {
+      window.removeEventListener('chalamandra:panic-mode-updated', updatePanicMode);
+      window.removeEventListener('storage', updatePanicMode);
     };
   }, []);
 
@@ -59,6 +78,26 @@ function App() {
 
     setAccessMessage('❌ Código inválido. Inténtalo de nuevo.');
   };
+
+  const pathname = window.location.pathname.replace(/\/$/, '') || '/';
+  if (pathname === '/admin-bunker') {
+    return <AdminBunker />;
+  }
+
+  if (panicMode) {
+    return (
+      <div className="min-h-screen fondo-urbano flex items-center justify-center px-6 text-center">
+        <div className="max-w-xl border border-[var(--chala-rojo)]/60 p-8">
+          <h1 className="text-3xl font-black uppercase tracking-widest text-[var(--chala-rojo)]">
+            Mantenimiento por Decodificación
+          </h1>
+          <p className="mt-4 text-[var(--chala-gris)] text-sm">
+            Estamos aplicando ajustes críticos en vivo. Regresa en unos minutos.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen font-sans selection:bg-[var(--chala-azul)] selection:text-white transition-all duration-300 ${showAdminBanner ? 'pt-20' : 'pt-8'} px-8 pb-8 fondo-urbano`}>
@@ -125,6 +164,7 @@ function App() {
             href={getKofiCheckoutUrl()}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={trackKofiClick}
             className="text-[var(--chala-rosa)] hover:text-[var(--chala-mandala)] transition-colors"
           >
             Suscripción
@@ -133,6 +173,7 @@ function App() {
             href={getKofiCheckoutUrl()}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={trackKofiClick}
             className="text-[var(--chala-rosa)] hover:text-[var(--chala-mandala)] transition-colors"
           >
             Soporte
