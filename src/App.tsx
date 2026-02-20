@@ -61,7 +61,7 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-black text-gray-100 font-sans selection:bg-blue-500 selection:text-white transition-all duration-300 ${showAdminBanner ? 'pt-20' : 'pt-8'} px-8 pb-8`}>
+    <div className={`min-h-screen font-sans selection:bg-[var(--chala-azul)] selection:text-white transition-all duration-300 ${showAdminBanner ? 'pt-20' : 'pt-8'} px-8 pb-8 fondo-urbano`}>
       {/* Admin Banner */}
       <AdminBanner
         isVisible={showAdminBanner}
@@ -125,7 +125,7 @@ function App() {
             href={getKofiCheckoutUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-purple-400 hover:text-purple-300 transition-colors"
+            className="text-[var(--chala-rosa)] hover:text-[var(--chala-mandala)] transition-colors"
           >
             Suscripción
           </a>
@@ -133,7 +133,7 @@ function App() {
             href={getKofiCheckoutUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-purple-400 hover:text-purple-300 transition-colors"
+            className="text-[var(--chala-rosa)] hover:text-[var(--chala-mandala)] transition-colors"
           >
             Soporte
           </a>
@@ -141,7 +141,7 @@ function App() {
 
         {showBunkerCodeInput && (
           <form onSubmit={handleBunkerSubmit} className="mb-6 mx-auto max-w-md space-y-2">
-            <label htmlFor="bunker-code" className="block text-xs text-purple-300 uppercase tracking-widest">
+            <label htmlFor="bunker-code" className="block text-xs text-[var(--chala-mandala)] uppercase tracking-widest">
               Introduce tu Código de Acceso del Búnker
             </label>
             <input
@@ -149,19 +149,19 @@ function App() {
               type="text"
               value={accessCode}
               onChange={(event) => setAccessCode(event.target.value)}
-              className="w-full border border-purple-600/50 bg-black px-3 py-2 text-sm text-purple-100 outline-none focus:border-purple-400"
+              className="w-full border border-[var(--chala-azul)]/70 bg-[var(--chala-tinta)] px-3 py-2 text-sm text-[var(--chala-gris)] outline-none focus:border-[var(--chala-mandala)]"
               autoComplete="off"
             />
             <button
               type="submit"
-              className="px-4 py-2 border border-purple-500 text-purple-300 text-xs uppercase tracking-wider hover:bg-purple-800/20 transition-colors"
+              className="px-4 py-2 border border-[var(--chala-rosa)] text-[var(--chala-gris)] text-xs uppercase tracking-wider hover:bg-[var(--chala-rosa)]/20 transition-colors boton-audaz"
             >
               Validar acceso
             </button>
           </form>
         )}
 
-        {accessMessage && <p className="mb-4 text-xs text-purple-300">{accessMessage}</p>}
+        {accessMessage && <p className="mb-4 text-xs text-[var(--chala-gris)]">{accessMessage}</p>}
 
         <div className="flex items-center justify-center gap-8 mb-4">
           <div className="text-[10px] text-gray-600">
