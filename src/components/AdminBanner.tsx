@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, Settings, Activity } from 'lucide-react';
+import { useStats } from '../hooks/useStats';
 
 interface AdminBannerProps {
   isVisible: boolean;
@@ -7,6 +8,8 @@ interface AdminBannerProps {
 }
 
 export const AdminBanner: React.FC<AdminBannerProps> = ({ isVisible, onToggle }) => {
+  const { stats } = useStats();
+
   if (!isVisible) {
     return (
       <button
@@ -34,10 +37,16 @@ export const AdminBanner: React.FC<AdminBannerProps> = ({ isVisible, onToggle })
               <span className="text-red-200">Sistema Operativo</span>
             </div>
             <div className="text-red-300">
+              Decodificaciones: {stats.decodificaciones}
+            </div>
+            <div className="text-red-300">
               Uptime: 99.7%
             </div>
             <div className="text-red-300">
               Usuarios Activos: 1,247
+            </div>
+            <div className="text-red-300">
+              Revenue: ${stats.totalRevenue}
             </div>
           </div>
         </div>
