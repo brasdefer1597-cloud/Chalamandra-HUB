@@ -1,0 +1,16 @@
+{
+  "cpu_load": 85,
+  "vqe_state": "-1.0000",
+  "shor_factor": "15=3x5",
+  "vibe": "Agresivo",
+  "system_status": "online",
+  "status": "online",
+  "poas": 1.4,
+  "ultima_llave": "34833D34",
+  "grover_status": "READY",
+  "vqe_status": "OPTIMIZING",
+  "shor_status": "FACTORIZING",
+  "updated_at": "2026-02-20T17:26:25Z",
+  "llave_expiracion": 1771611985,
+  "countdown": "60:00"
+}

@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --rosa-rebelde: #ff2ea6;
+  --verde-acido: #7dff3f;
+}

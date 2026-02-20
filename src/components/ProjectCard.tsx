@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ExternalLink, Activity, Users, Zap, Lock, Sparkles } from 'lucide-react';
 import { Project } from '../types';
 
@@ -9,6 +9,7 @@ interface ProjectCardProps {
   isAdmin: boolean;
   onUpgrade: (project: Project) => void;
   onNodeClick: (node: string) => void;
+  isDegraded?: boolean;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -17,11 +18,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   pudinIntensity,
   isAdmin,
   onUpgrade,
-  onNodeClick
+  onNodeClick,
+  isDegraded = false
 }) => {
   const [isFlashing, setIsFlashing] = useState(false);
-  const isLocked = Boolean(project.isPro && !isAdmin);
 
+  const oraclePenalty = useMemo(() => {
+    if (project.id !== 'oraculo-chalamandra') return null;
+    const until = Number(localStorage.getItem('oraculo_lock_until') ?? 0);
+    if (!until || Number.isNaN(until) || Date.now() > until) return null;
+    const remaining = Math.ceil((until - Date.now()) / 60_000);
+    return Math.max(1, remaining);
+  }, [project.id]);
+
+  const isLocked = Boolean(isDegraded || (project.isPro && !isAdmin) || oraclePenalty);
   const isInternalRoute = project.url.startsWith('/');
 
   const getStatusColor = (status: Project['status']) => {
@@ -89,9 +99,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       <div className="flex flex-col gap-3">
         <a
           href={project.url}
-          target={isInternalRoute ? undefined : "_blank"}
-          rel={isInternalRoute ? undefined : "noopener noreferrer"}
-          title={isLocked ? 'Requiere Visión de Rayos X (PRO)' : 'Launch System'}
+          target={isInternalRoute ? undefined : '_blank'}
+          rel={isInternalRoute ? undefined : 'noopener noreferrer'}
+          title={isLocked ? 'Nodo bloqueado por seguridad' : 'Launch System'}
           onClick={(event) => {
             onNodeClick(project.title);
             if (isLocked) event.preventDefault();
@@ -104,7 +114,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         >
           {isLocked ? (
             <>
-              <Lock className="h-3 w-3" /> Locked (Requires Pro)
+              <Lock className="h-3 w-3" /> {isDegraded ? 'Modo degradado (HUB offline)' : oraclePenalty ? `Oráculo bloqueado (${oraclePenalty}m)` : 'Locked (Requires Pro)'}
             </>
           ) : (
             <>

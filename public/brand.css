@@ -1,6 +1,8 @@
 :root {
+  --rosa-rebelde: #ff2ea6;
+  --verde-acido: #7dff3f;
   --ch-bg: #050505;
-  --ch-neon-green: #4ade80;
+  --ch-neon-green: var(--verde-acido);
   --ch-neon-purple: #a855f7;
   --ch-neon-blue: #3b82f6;
   --ch-text: #e5e7eb;

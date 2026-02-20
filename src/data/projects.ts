@@ -4,7 +4,7 @@ export const projects: Project[] = [
   {
     id: 'oraculo-chalamandra',
     title: 'Oráculo Chalamandra',
-    desc: 'Interfaz de consulta místico-tecnológica. Procesamiento de lenguaje natural con estética de alta fidelidad.',
+    desc: 'Acceso prohibido en modo BIOS. Solo input, sin ornamentos.',
     url: '/oraculo',
     tag: 'Oracle AI',
     isPro: true,
@@ -19,7 +19,7 @@ export const projects: Project[] = [
   {
     id: 'ajedrez-criminal',
     title: 'Ajedrez Criminal',
-    desc: 'Motor de decisión estratégica potenciado por Gemini 1.5 Flash. Análisis de patrones y lógica de alto nivel.',
+    desc: 'Operación de campo: acción y veneno. Sin explicaciones técnicas.',
     url: '/ajedrez',
     tag: 'IA & Strategy',
     isPro: true,
@@ -34,7 +34,7 @@ export const projects: Project[] = [
   {
     id: 'srap-realidades',
     title: 'SRAP: Realidades Crudas',
-    desc: 'Sistema de Renderizado de Alta Precisión. Interfaz semántica para el análisis de contextos urbanos complejos.',
+    desc: 'Telemetría cruda del Celeron y espejo de consola en tiempo real.',
     url: '/nodo-srap',
     tag: 'Semantic UI',
     isPro: true,
@@ -49,7 +49,7 @@ export const projects: Project[] = [
   {
     id: 'chalamandra-magistral',
     title: 'Chalamandra Magistral',
-    desc: 'El núcleo del ecosistema. Historias, metodologías y decodificación de realidades.',
+    desc: 'Dossier Decox: seducción + teoría. Punto de retorno para comprender el caos.',
     url: 'https://chalamandra-magistral.vercel.app/',
     tag: 'Mastermind',
     isPro: false,
