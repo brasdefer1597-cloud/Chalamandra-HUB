@@ -5,12 +5,23 @@ import { ProjectCard } from './components/ProjectCard';
 import { AdminBanner } from './components/AdminBanner';
 import { PudinButton } from './components/PudinButton';
 import { ProBadge } from './components/ProBadge';
+import { PremiumButton } from './components/PremiumButton';
 import { usePudin } from './hooks/usePudin';
+import { useStats } from './hooks/useStats';
 import { Terminal, Cpu, Database } from 'lucide-react';
 
 function App() {
   const [showAdminBanner, setShowAdminBanner] = useState(false);
   const { pudinState } = usePudin();
+  const { stats } = useStats();
+
+  // Configurar tracking global
+  React.useEffect(() => {
+    window.trackDecoEvent = (event: string, data: { valor: string; nodo: string }) => {
+      console.log(`🔥 DECO EVENT: ${event}`, data);
+      // Aquí se podría integrar con Google Analytics, Mixpanel, etc.
+    };
+  }, []);
 
   return (
     <div className={`min-h-screen bg-black text-gray-100 font-sans selection:bg-blue-500 selection:text-white transition-all duration-300 ${showAdminBanner ? 'pt-20' : 'pt-8'} px-8 pb-8`}>
@@ -69,9 +80,16 @@ function App() {
 
       {/* Footer */}
       <footer className="max-w-5xl mx-auto mt-20 pt-8 border-t border-gray-900 text-center">
+        <div className="mb-8 flex justify-center">
+          <PremiumButton variant="cta" size="lg" />
+        </div>
+        
         <div className="flex items-center justify-center gap-8 mb-4">
           <div className="text-[10px] text-gray-600">
             <span className="text-gray-500">PUDIN ACTIVATIONS:</span> {pudinState.totalActivations}
+          </div>
+          <div className="text-[10px] text-gray-600">
+            <span className="text-gray-500">DECODIFICACIONES:</span> {stats.decodificaciones}
           </div>
           <div className="text-[10px] text-gray-600">
             <span className="text-gray-500">UPTIME:</span> 99.7%
