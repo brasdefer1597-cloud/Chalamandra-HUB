@@ -221,3 +221,78 @@ export const track = (evt: HubEvent) => {
   - UX y estado visual en frontend.
   - Seguridad, permisos y métricas reales en backend.
 
+
+
+---
+
+## 11) 🚀 Recomendaciones de Experto (roadmap accionable)
+
+### 11.1 Profesionalizar control de recursos (cgroups)
+
+`renice` ayuda, pero no aísla de forma estricta CPU/Memoria. Para operación real, mover procesos críticos (API de métricas, workers de agregación) a cgroups.
+
+**Ejemplo operativo (Linux host):**
+```bash
+sudo cgcreate -g cpu,memory:quantum_group
+sudo cgset -r cpu.shares=512 quantum_group
+sudo cgset -r memory.limit_in_bytes=512M quantum_group
+sudo cgexec -g cpu,memory:quantum_group python worker.py
+```
+
+**Uso recomendado en este proyecto:**
+- worker de agregación de eventos Ko-fi,
+- servicio de cálculo de health checks,
+- tareas periódicas de limpieza/rollups.
+
+### 11.2 Logging estructurado
+
+Definir un formato consistente por evento para trazabilidad y auditoría.
+
+**Snippet mínimo Python (backend):**
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s %(message)s'
+)
+logger = logging.getLogger('chalamandra.ops')
+logger.info('panic_mode_toggle', extra={'actor': 'admin', 'enabled': True})
+```
+
+**Campos mínimos sugeridos:**
+- `event`, `actor`, `session_id`, `route`, `latency_ms`, `result`, `correlation_id`.
+
+### 11.3 Dashboard real (FastAPI + WebSocket + React)
+
+Para pasar de estado local a observabilidad real:
+
+- **FastAPI** para exponer `/api/public/flags`, `/api/admin/panic-mode`, `/api/metrics/kofi/today`.
+- **WebSocket** (`/ws/ops`) para empujar métricas en vivo (clicks, estado nodos, pánico).
+- **React dashboard** (`/admin-bunker`) suscrito al WebSocket para actualizar sin polling.
+
+**Pipeline sugerido:**
+1. FE emite evento de click Ko-fi.
+2. API persiste evento.
+3. Worker agrega métricas cada N minutos.
+4. API emite actualización por WebSocket.
+5. Dashboard refresca contadores y estado en tiempo real.
+
+### 11.4 Siguiente nivel del Decision Engine
+
+Evolución por etapas:
+
+1. **Reglas dinámicas (corto plazo):**
+   - JSON/YAML configurable por entorno.
+   - Prioridades de reglas y ventanas temporales.
+   - Auditoría de decisiones.
+2. **ML ligero (mediano plazo):**
+   - features de ruido/carga/eventos por minuto.
+   - modelo interpretable (p.ej. árbol pequeño / regresión logística).
+   - fallback a reglas cuando la confianza sea baja.
+
+**KPI de calidad del motor:**
+- precisión en detección de picos,
+- tasa de falsos positivos de pánico,
+- tiempo medio de recuperación (MTTR),
+- estabilidad de decisiones por franja horaria.
