@@ -27,3 +27,15 @@ export interface PudinState {
   lastActivation: Date;
   totalActivations: number;
 }
+
+export interface ChalamandraStats {
+  decodificaciones: number;
+  lastDecodification: Date;
+  totalRevenue: number;
+}
+
+declare global {
+  interface Window {
+    trackDecoEvent: (event: string, data: { valor: string; nodo: string }) => void;
+  }
+}
