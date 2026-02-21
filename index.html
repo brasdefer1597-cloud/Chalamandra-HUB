@@ -3,161 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chalamandra HUB | Nivel Cuántico</title>
+    <title>Chalamandra HUB | Singularidad</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+        body, html { margin: 0; padding: 0; background: #050505; color: #00ff88; font-family: 'Space Grotesk', sans-serif; overflow: hidden; }
         
-        body {
-            background-color: #050505;
-            color: #ffffff;
-            font-family: 'Space Grotesk', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            background-image: radial-gradient(circle at center, #112211 0%, #050505 100%);
-        }
+        /* Canvas de Matrix */
+        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity 2s; pointer-events: none; }
         
-        /* Panel Principal */
-        .panel {
-            text-align: center;
-            padding: 3rem 5rem;
-            border-radius: 15px;
-            background: rgba(10, 10, 10, 0.8);
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.15);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 10;
+        .ui-layer { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 80%); }
+        
+        .panel { 
+            text-align: center; padding: 3rem; border: 1px solid rgba(0, 255, 136, 0.3);
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.1); border-radius: 2px;
         }
 
-        h1 {
-            font-size: 1.5rem; color: #888;
-            text-transform: uppercase; letter-spacing: 4px;
-            margin-bottom: 5px;
-        }
-
-        .masa-critica {
-            font-size: 6rem; font-weight: 700;
-            color: #00ff88; text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-            margin: 10px 0; letter-spacing: -2px;
-        }
-
-        /* Indicador de Estado */
-        .status {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            color: #aaa; font-size: 0.9rem; text-transform: uppercase; margin-top: 20px;
-        }
-        .pulse {
-            width: 12px; height: 12px; background-color: #00ff88;
-            border-radius: 50%; animation: pulse-animation 1.5s infinite;
-        }
-
-        /* --- COMPONENTE GHOSTPULSE --- */
-        .node-counter {
-            position: fixed; top: 20px; right: 20px;
-            background: #0a0a0a; border: 1px solid #00ff88;
-            padding: 10px 20px; border-radius: 5px;
-            font-family: 'Courier New', monospace; color: #00ff88;
-            z-index: 9999; box-shadow: 0 0 20px #00ff8844;
-            animation: pulse-glow 2s infinite alternate;
-        }
-
-        .toast-container {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 300px; z-index: 9999;
-            display: flex; flex-direction: column-reverse; gap: 10px;
-        }
-
-        .toast {
-            background: #0a0a0a; border: 1px solid #00ff88;
-            color: #00ff88; padding: 10px; border-radius: 5px;
-            font-family: 'Courier New', monospace; font-size: 0.9em;
-            box-shadow: 0 0 15px #00ff8844;
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        /* Animaciones */
-        @keyframes pulse-animation {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
-        }
-        @keyframes pulse-glow {
-            from { text-shadow: 0 0 5px #00ff88; }
-            to { text-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        .masa-critica { font-size: 5rem; font-weight: 700; text-shadow: 0 0 20px #00ff88; margin: 20px 0; }
+        .status-bar { font-family: monospace; font-size: 0.9rem; letter-spacing: 2px; border-top: 1px solid #333; padding-top: 10px; color: #888; }
+        
+        /* Animación de Alerta */
+        .glitch-active { animation: shake 0.5s infinite; color: #fff !important; text-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88 !important; }
+        @keyframes shake { 0% { transform: translate(0,0); } 20% { transform: translate(-2px,2px); } 40% { transform: translate(-2px,-2px); } 60% { transform: translate(2px,2px); } 80% { transform: translate(2px,-2px); } 100% { transform: translate(0,0); } }
     </style>
 </head>
 <body>
 
-    <div class="node-counter" id="node-counter">⚡ NODES ACTIVE: 85</div>
+    <canvas id="matrix-canvas"></canvas>
 
-    <div class="panel">
-        <h1>Microcosmos Elite</h1>
-        <div class="status">
-            <div class="pulse"></div>
-            <span>Enlace Cuántico Estable</span>
+    <div class="ui-layer">
+        <div class="panel" id="main-panel">
+            <div style="font-size: 0.8rem; letter-spacing: 5px;">ESTADO: SINGULARIDAD PRIVADA</div>
+            <div class="masa-critica" id="display-masa">$0.00</div>
+            <div class="status-bar" id="status-text">ESPERANDO INYECCIÓN DE MATERIA...</div>
         </div>
-        <div class="masa-critica" id="display-masa">---</div>
-        <div style="margin-top: 30px; font-size: 0.75rem; color: #555;" id="display-time"></div>
     </div>
 
-    <div class="toast-container" id="toast-container"></div>
-
     <script>
-        // 1. Lógica Principal: Sincronización de Masa Crítica
-        async function fetchQuantumData() {
-            try {
-                const response = await fetch('cloud_snapshot.json?t=' + new Date().getTime());
-                const data = await response.json();
-                const formattedAmount = parseFloat(data.masa_critica).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-                document.getElementById('display-masa').innerText = formattedAmount;
-                document.getElementById('display-time').innerText = "Última sincronización: " + data.last_update;
-            } catch (error) {
-                document.getElementById('display-masa').innerText = "ERROR";
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let statusText = document.getElementById('status-text');
+        let masaDisplay = document.getElementById('display-masa');
+
+        // Configuración Lluvia de Matrix
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0f0";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
             }
         }
-        fetchQuantumData();
-        setInterval(fetchQuantumData, 5000);
 
-        // 2. Lógica GhostPulse: Nodos Activos
-        setInterval(() => {
-            const nodes = Math.floor(Math.random() * (120 - 85 + 1) + 85);
-            document.getElementById('node-counter').innerText = `⚡ NODES ACTIVE: ${nodes}`;
-        }, 8000);
+        let matrixInterval;
 
-        // 3. Lógica GhostPulse: Observadores Globales
-        const toastContainer = document.getElementById('toast-container');
-        const locations = ["🇬🇧 London", "🇺🇸 Palo Alto", "🇸🇬 Singapore", "🇩🇪 Berlin", "🇲🇽 Xalapa", "🇯🇵 Tokyo", "🇨🇳 Shenzhen"];
-        
-        setInterval(() => {
-            const loc = locations[Math.floor(Math.random() * locations.length)];
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerText = `[SYSTEM] New observer connected from ${loc}...`;
-            
-            toastContainer.appendChild(toast);
-            
-            // Mantener máximo 5 notificaciones en pantalla
-            if (toastContainer.children.length > 5) {
-                toastContainer.removeChild(toastContainer.firstChild);
-            }
+        async function checkStatus() {
+            try {
+                const res = await fetch('cloud_snapshot.json?t=' + Date.now());
+                const data = await res.json();
+                
+                // Actualizar Monto
+                masaDisplay.innerText = parseFloat(data.masa_critica).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
-            // Desaparecer después de 6 segundos
-            setTimeout(() => {
-                if (toastContainer.contains(toast)) {
-                    toastContainer.removeChild(toast);
+                // Disparar Efecto si hay Glitch
+                if (data.glitch === true) {
+                    activateGlitch();
                 }
-            }, 6000);
-        }, 12000);
-    </script>
+            } catch (e) {}
+        }
 
+        function activateGlitch() {
+            canvas.style.opacity = "1";
+            document.getElementById('main-panel').classList.add('glitch-active');
+            statusText.innerText = "¡ALERTA! MASA CRÍTICA DETECTADA - SINCRONIZANDO...";
+            if(!matrixInterval) matrixInterval = setInterval(drawMatrix, 5000); // Lluvia lenta/persistente
+            
+            setTimeout(() => {
+                canvas.style.opacity = "0";
+                document.getElementById('main-panel').classList.remove('glitch-active');
+                statusText.innerText = "SINGULARIDAD ESTABLEIZADA.";
+            }, 10000); // El efecto dura 10 segundos
+        }
+
+        setInterval(checkStatus, 3000);
+        checkStatus();
+    </script>
 </body>
 </html>
