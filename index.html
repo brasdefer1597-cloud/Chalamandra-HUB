@@ -21,6 +21,7 @@
             background-image: radial-gradient(circle at center, #112211 0%, #050505 100%);
         }
         
+        /* Panel Principal */
         .panel {
             text-align: center;
             padding: 3rem 5rem;
@@ -29,60 +30,74 @@
             box-shadow: 0 0 40px rgba(0, 255, 136, 0.15);
             border: 1px solid rgba(0, 255, 136, 0.3);
             backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
         h1 {
-            font-size: 1.5rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 4px;
+            font-size: 1.5rem; color: #888;
+            text-transform: uppercase; letter-spacing: 4px;
             margin-bottom: 5px;
         }
 
         .masa-critica {
-            font-size: 6rem;
-            font-weight: 700;
-            color: #00ff88;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-            margin: 10px 0;
-            letter-spacing: -2px;
+            font-size: 6rem; font-weight: 700;
+            color: #00ff88; text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            margin: 10px 0; letter-spacing: -2px;
         }
 
+        /* Indicador de Estado */
         .status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: #aaa;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 20px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            color: #aaa; font-size: 0.9rem; text-transform: uppercase; margin-top: 20px;
         }
-
         .pulse {
-            width: 12px;
-            height: 12px;
-            background-color: #00ff88;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff88;
-            animation: pulse-animation 1.5s infinite;
+            width: 12px; height: 12px; background-color: #00ff88;
+            border-radius: 50%; animation: pulse-animation 1.5s infinite;
         }
 
-        .timestamp {
-            margin-top: 30px;
-            font-size: 0.75rem;
-            color: #555;
+        /* --- COMPONENTE GHOSTPULSE --- */
+        .node-counter {
+            position: fixed; top: 20px; right: 20px;
+            background: #0a0a0a; border: 1px solid #00ff88;
+            padding: 10px 20px; border-radius: 5px;
+            font-family: 'Courier New', monospace; color: #00ff88;
+            z-index: 9999; box-shadow: 0 0 20px #00ff8844;
+            animation: pulse-glow 2s infinite alternate;
         }
 
+        .toast-container {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 300px; z-index: 9999;
+            display: flex; flex-direction: column-reverse; gap: 10px;
+        }
+
+        .toast {
+            background: #0a0a0a; border: 1px solid #00ff88;
+            color: #00ff88; padding: 10px; border-radius: 5px;
+            font-family: 'Courier New', monospace; font-size: 0.9em;
+            box-shadow: 0 0 15px #00ff8844;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Animaciones */
         @keyframes pulse-animation {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
         }
+        @keyframes pulse-glow {
+            from { text-shadow: 0 0 5px #00ff88; }
+            to { text-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
     </style>
 </head>
 <body>
+
+    <div class="node-counter" id="node-counter">⚡ NODES ACTIVE: 85</div>
 
     <div class="panel">
         <h1>Microcosmos Elite</h1>
@@ -90,36 +105,58 @@
             <div class="pulse"></div>
             <span>Enlace Cuántico Estable</span>
         </div>
-        
         <div class="masa-critica" id="display-masa">---</div>
-        
-        <div class="timestamp" id="display-time">Sincronizando reloj temporal...</div>
+        <div style="margin-top: 30px; font-size: 0.75rem; color: #555;" id="display-time"></div>
     </div>
 
+    <div class="toast-container" id="toast-container"></div>
+
     <script>
+        // 1. Lógica Principal: Sincronización de Masa Crítica
         async function fetchQuantumData() {
             try {
-                // El timestamp Evita que el navegador guarde en caché el archivo viejo
                 const response = await fetch('cloud_snapshot.json?t=' + new Date().getTime());
                 const data = await response.json();
-                
-                // Formateamos a dólares: $3,100.00
-                const formattedAmount = parseFloat(data.masa_critica).toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'USD'
-                });
-
+                const formattedAmount = parseFloat(data.masa_critica).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
                 document.getElementById('display-masa').innerText = formattedAmount;
                 document.getElementById('display-time').innerText = "Última sincronización: " + data.last_update;
             } catch (error) {
-                console.error("Fallo en la matriz:", error);
                 document.getElementById('display-masa').innerText = "ERROR";
             }
         }
-
-        // Cargar inmediatamente y luego buscar actualizaciones cada 5 segundos
         fetchQuantumData();
         setInterval(fetchQuantumData, 5000);
+
+        // 2. Lógica GhostPulse: Nodos Activos
+        setInterval(() => {
+            const nodes = Math.floor(Math.random() * (120 - 85 + 1) + 85);
+            document.getElementById('node-counter').innerText = `⚡ NODES ACTIVE: ${nodes}`;
+        }, 8000);
+
+        // 3. Lógica GhostPulse: Observadores Globales
+        const toastContainer = document.getElementById('toast-container');
+        const locations = ["🇬🇧 London", "🇺🇸 Palo Alto", "🇸🇬 Singapore", "🇩🇪 Berlin", "🇲🇽 Xalapa", "🇯🇵 Tokyo", "🇨🇳 Shenzhen"];
+        
+        setInterval(() => {
+            const loc = locations[Math.floor(Math.random() * locations.length)];
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = `[SYSTEM] New observer connected from ${loc}...`;
+            
+            toastContainer.appendChild(toast);
+            
+            // Mantener máximo 5 notificaciones en pantalla
+            if (toastContainer.children.length > 5) {
+                toastContainer.removeChild(toastContainer.firstChild);
+            }
+
+            // Desaparecer después de 6 segundos
+            setTimeout(() => {
+                if (toastContainer.contains(toast)) {
+                    toastContainer.removeChild(toast);
+                }
+            }, 6000);
+        }, 12000);
     </script>
 
 </body>
