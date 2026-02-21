@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chalamandra HUB | Nivel Cuántico</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+        
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-image: radial-gradient(circle at center, #112211 0%, #050505 100%);
+        }
+        
+        .panel {
+            text-align: center;
+            padding: 3rem 5rem;
+            border-radius: 15px;
+            background: rgba(10, 10, 10, 0.8);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.15);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+        }
+
+        .masa-critica {
+            font-size: 6rem;
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            margin: 10px 0;
+            letter-spacing: -2px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #aaa;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background-color: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff88;
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        .timestamp {
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #555;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel">
+        <h1>Microcosmos Elite</h1>
+        <div class="status">
+            <div class="pulse"></div>
+            <span>Enlace Cuántico Estable</span>
+        </div>
+        
+        <div class="masa-critica" id="display-masa">---</div>
+        
+        <div class="timestamp" id="display-time">Sincronizando reloj temporal...</div>
+    </div>
+
+    <script>
+        async function fetchQuantumData() {
+            try {
+                // El timestamp Evita que el navegador guarde en caché el archivo viejo
+                const response = await fetch('cloud_snapshot.json?t=' + new Date().getTime());
+                const data = await response.json();
+                
+                // Formateamos a dólares: $3,100.00
+                const formattedAmount = parseFloat(data.masa_critica).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                });
+
+                document.getElementById('display-masa').innerText = formattedAmount;
+                document.getElementById('display-time').innerText = "Última sincronización: " + data.last_update;
+            } catch (error) {
+                console.error("Fallo en la matriz:", error);
+                document.getElementById('display-masa').innerText = "ERROR";
+            }
+        }
+
+        // Cargar inmediatamente y luego buscar actualizaciones cada 5 segundos
+        fetchQuantumData();
+        setInterval(fetchQuantumData, 5000);
+    </script>
+
+</body>
+</html>
